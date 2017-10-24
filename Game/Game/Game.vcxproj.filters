@@ -1,28 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Common">
-      <UniqueIdentifier>8e14e406-d6f2-4b4e-9a2c-0df97c4f07ba</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets">
-      <UniqueIdentifier>7ccb7dae-d1ab-440e-9cd0-560cf0f9fafb</UniqueIdentifier>
+      <UniqueIdentifier>803d15e8-ebff-4309-af20-0f3ae488be9b</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dds;dlg;fbx;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tga;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{33f8f30f-14a5-43d6-86b8-08d4aabe8547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sprite">
+      <UniqueIdentifier>{3d27c6e0-519d-483a-bb09-bb17e9df00d5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="StepTimer.h">
-      <Filter>Common</Filter>
+    <ClInclude Include="StepTimer.h" />
+    <ClInclude Include="BaseScene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="d3dx12.h">
-      <Filter>Common</Filter>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite2D.h">
+      <Filter>Sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite2D.cpp">
+      <Filter>Sprite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

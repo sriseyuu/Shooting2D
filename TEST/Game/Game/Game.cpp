@@ -5,9 +5,12 @@
 #include "pch.h"
 #include "Game.h"
 
+#include <WICTextureLoader.h>
+
 extern void ExitGame();
 
 using namespace DirectX;
+using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
 
@@ -37,7 +40,13 @@ void Game::Initialize(HWND window, int width, int height)
     m_timer.SetTargetElapsedSeconds(1.0 / 60);
     */
 
-	m_SceneManager = new SceneManager(m_d3dDevice.Get(),m_d3dContext.Get());
+	m_spriteBatch = std::make_unique<SpriteBatch>(m_d3dContext.Get());
+
+	m_states = std::make_unique<CommonStates>(m_d3dDevice.Get());
+
+	CreateWICTextureFromFile(m_d3dDevice.Get(), L"Resources/srise1103.png", nullptr,
+		m_texture.ReleaseAndGetAddressOf());
+
 }
 
 // Executes the basic game loop.
@@ -58,8 +67,6 @@ void Game::Update(DX::StepTimer const& timer)
 
     // TODO: Add your game logic here.
     elapsedTime;
-
-	m_SceneManager->Update();
 }
 
 // Draws the scene.
@@ -75,7 +82,19 @@ void Game::Render()
 
     // TODO: Add your rendering code here.
 
-	m_SceneManager->Render();
+	m_d3dContext->OMSetBlendState(m_states->Opaque(), Colors::Black, 0xFFFFFFFF);
+	m_d3dContext->OMSetDepthStencilState(m_states->DepthDefault(), 0);
+	m_d3dContext->RSSetState(m_states->CullCounterClockwise());
+
+	auto samplerState = m_states->LinearWrap();
+	m_d3dContext->PSSetSamplers(0, 1, &samplerState);
+
+	m_spriteBatch->Begin(SpriteSortMode_Deferred, m_states->NonPremultiplied());
+	
+	m_spriteBatch->Draw(m_texture.Get(), m_screenPos, nullptr, Colors::White,
+		0.f, m_origin);
+	
+	m_spriteBatch->End();
 
     Present();
 }
