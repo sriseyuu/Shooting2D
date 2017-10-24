@@ -13,11 +13,13 @@
 #include "Sprite2D.h"
 
 #include <Keyboard.h>
+#include <vector>
 
 class Player
 {
 public:
-	const float MOVE_SPD = 2.5f;
+	static const float MOVE_SPD;
+	static const DirectX::SimpleMath::Vector2 BULLET_SPD;
 
 	// コンストラクタ
 	Player(ID3D11Device * device);
@@ -29,4 +31,9 @@ public:
 
 private:
 	Sprite2D m_Player;
+
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_PlayerBulletTexture;
+	std::vector<Sprite2D> m_Bullets;
+
+	int cnt = 0;
 };
