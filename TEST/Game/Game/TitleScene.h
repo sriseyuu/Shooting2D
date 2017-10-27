@@ -16,22 +16,17 @@
 #include "Enemy.h"
 #include <vector>
 
-class GameScene : public BaseScene
+class TitleScene : public BaseScene
 {
-private:
-
-	// ìGÇÃÉçÅ[Éh
-	void LoadCSV(ID3D11Device* device);
 public:
-	GameScene()	: BaseScene() {} 
-	GameScene(ID3D11Device* device,ID3D11DeviceContext* context);
-	~GameScene();
+	TitleScene() : BaseScene() {}
+	TitleScene(ID3D11Device* device, ID3D11DeviceContext* context);
+	~TitleScene() {}
 	void Update();
 	void Render(DirectX::SpriteBatch* spriteBatch);
 
-
 private:
-	Player* m_Player;
 
-	std::vector<Enemy*> m_Enemies;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_texture;
+
 };

@@ -37,7 +37,11 @@ public:
 	void SetPos(DirectX::SimpleMath::Vector2 pos) { m_screenPos = pos; }
 	DirectX::SimpleMath::Vector2 GetPos() { return m_screenPos; }
 
+	// 回転角の設定
 	void SetRotation(float rot) { m_rot = rot; }
+
+	// 画像の大きさの取得
+	DirectX::SimpleMath::Vector2 GetTextureSize() { return m_origin * 2; }
 
 	// プレイヤのフレーム移動(引数：移動距離)
 	void Translate(DirectX::SimpleMath::Vector2 vec);

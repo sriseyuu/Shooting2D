@@ -11,6 +11,7 @@
 //__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/
 #pragma once
 #include "Sprite2D.h"
+#include "Bullet.h"
 
 #include <Keyboard.h>
 #include <vector>
@@ -29,11 +30,17 @@ public:
 
 	void Render(DirectX::SpriteBatch* spriteBatch);
 
+	Circle2D GetCollisionCircle() { return m_Collision; }
+
+	std::vector<Circle2D> GetCollisionBulletCircle();
+
+	std::vector<Bullet>& GetBullet() { return m_Bullets; }
 private:
 	Sprite2D m_Player;
+	Circle2D m_Collision;
 
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_PlayerBulletTexture;
-	std::vector<Sprite2D> m_Bullets;
+	Bullet m_NormalBullet;
+	std::vector<Bullet> m_Bullets;
 
 	int cnt = 0;
 };

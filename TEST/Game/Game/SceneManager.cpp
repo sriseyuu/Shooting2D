@@ -23,7 +23,11 @@ SceneManager::SceneManager(ID3D11Device* device, ID3D11DeviceContext* context)
 	m_states = std::make_unique<CommonStates>(m_device);
 
 	m_Scene = nullptr;
-	m_Scene = new GameScene(m_device, m_context);
+
+	m_NextScene = SCENE_GAME;
+	m_NowScene = m_NextScene;
+
+	ChangeScene(m_NowScene);
 
 }
 
@@ -34,6 +38,12 @@ SceneManager::~SceneManager()
 void SceneManager::Update()
 {
 	m_Scene->Update();
+
+	if (m_NowScene != m_NextScene)
+	{
+		ChangeScene(m_NextScene);
+		m_NowScene = m_NextScene;
+	}
 }
 
 void SceneManager::Render()
@@ -54,7 +64,10 @@ void SceneManager::ChangeScene(SCENE scene)
 
 	switch (scene)
 	{
-	case SCENE::SCENE_GAME:
+	case SCENE_TITLE:
+
+		break;
+	case SCENE_GAME:
 		m_Scene = new GameScene(m_device, m_context);
 		break;
 	default:

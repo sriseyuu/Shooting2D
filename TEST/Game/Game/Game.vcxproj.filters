@@ -29,6 +29,12 @@
       <Filter>Sprite</Filter>
     </ClInclude>
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Collision2D.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="TitleScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -44,6 +50,12 @@
       <Filter>Sprite</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Collision2D.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

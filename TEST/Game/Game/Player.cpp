@@ -19,17 +19,21 @@ const float Player::MOVE_SPD = 2.5f;
 const Vector2 Player::BULLET_SPD = DirectX::SimpleMath::Vector2(0, -16.0f);
 
 Player::Player(ID3D11Device* device)
+	: m_NormalBullet(device)
+	, m_Bullets()
 {
 	m_Player.SetTexture(device,L"Resources/Player.png");
-	CreateWICTextureFromFile(device, L"Resources/Bullet.png", nullptr,
-		m_PlayerBulletTexture.ReleaseAndGetAddressOf());
+	m_Player.SetPos(Vector2(600,300));
 
 	m_Bullets.resize(0);
+
+	m_Collision.m_pos = m_Player.GetPos();
+	m_Collision.m_Radius = m_Player.GetTextureSize().x / 2;
 }
 
 void Player::Update(DirectX::Keyboard::State state)
 {
-
+	cnt--;
 	Vector2 spd = Vector2::Zero;
 
 	if (state.Up) {
@@ -44,19 +48,19 @@ void Player::Update(DirectX::Keyboard::State state)
 	if (state.Right) {
 		spd.x += MOVE_SPD;
 	}
+
 	m_Player.Translate(spd);
 
 	if (state.Z) {
-		cnt--;
+
 		if (cnt < 0)
 		{
 			cnt = 6;
 			for (int i = 0; i < 3; i++)
 			{
-				Sprite2D bullet;
-				bullet.SetTexture(m_PlayerBulletTexture);
+				Bullet bullet = m_NormalBullet;
 				bullet.SetPos(m_Player.GetPos());
-				bullet.SetRotation(XMConvertToRadians((i - 1) * 15.0f));
+				bullet.SetRotation(XMConvertToRadians((i - 1) * 10.0f));
 
 				m_Bullets.push_back(bullet);
 			}
@@ -65,11 +69,11 @@ void Player::Update(DirectX::Keyboard::State state)
 
 
 	m_Player.Update();
-	std::vector<Sprite2D>::iterator it = m_Bullets.begin();
+	std::vector<Bullet>::iterator it = m_Bullets.begin();
 	while ( it != m_Bullets.end())
 	{
 		
-		it->Translate(BULLET_SPD);
+		it->SetSpd(BULLET_SPD);
 
 		it->Update();
 
@@ -79,18 +83,32 @@ void Player::Update(DirectX::Keyboard::State state)
 		else {
 			it++;
 		}
-
-
 	}
+
+	m_Collision.m_pos = m_Player.GetPos();
 }
 
 void Player::Render(DirectX::SpriteBatch * spriteBatch)
 {
 	m_Player.Render(spriteBatch);
 
-	for (std::vector<Sprite2D>::iterator it = m_Bullets.begin(); it < m_Bullets.end(); it++)
+	for (std::vector<Bullet>::iterator it = m_Bullets.begin(); it < m_Bullets.end(); it++)
 	{
 		(*it).Render(spriteBatch);
 	}
+}
+
+std::vector<Circle2D> Player::GetCollisionBulletCircle()
+{
+	std::vector<Circle2D> circle;
+
+	circle.resize(0);
+
+	for (std::vector<Bullet>::iterator itr = m_Bullets.begin(); itr != m_Bullets.end(); itr++)
+	{
+		circle.push_back(itr->GetCollisionCircle());
+	}
+
+	return circle;
 }
 
