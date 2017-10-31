@@ -22,10 +22,12 @@ private:
 
 	// “G‚Ìƒ[ƒh
 	void LoadCSV(ID3D11Device* device);
-//__/__/__/__/__/__/__/__/__/’eŠÖŒW__/__/__/__/__/__/__/__/__/
+//__/__/__/__/__/__/__/__/__/ƒQ[ƒ€ŠÖŒW__/__/__/__/__/__/__/__/__/
 
 	// ‰æ–ÊŠO‚És‚Á‚½‚ç’e‚ğÁ‚·
 	void ScreenOut(std::vector<Bullet*>& bullet);
+	// ‰æ–ÊŠO‚És‚Á‚½‚ç“G‚ğÁ‚·
+	void ScreenOut(std::vector<Enemy*>& enemies);
 	// ’e‚ÌXVˆ—
 	void BulletUpdate(std::vector<Bullet*> bullet);
 	// ƒvƒŒƒCƒ„‚Ì’e¶¬
@@ -36,6 +38,8 @@ private:
 	void CollisionBullet_Player(std::vector<Bullet*> & bullet1, Player* & Player);
 	// “G‚Æ’e‚Ì“–‚½‚è”»’è	
 	void CollisionBullet_Enemy(std::vector<Bullet*> & bullet, std::vector<Enemy*> & Enemies);
+
+//__/__/__/__/__/__/__/__/__/ŠÖ”__/__/__/__/__/__/__/__/__/
 public:
 	GameScene()	: BaseScene() {} 
 	GameScene(ID3D11Device* device,ID3D11DeviceContext* context);

@@ -63,6 +63,7 @@ void GameScene::Update()
 	BulletUpdate(m_PlayerBullets);
 	BulletUpdate(m_EnemyBullets);
 
+	ScreenOut(m_Enemies);
 	ScreenOut(m_PlayerBullets);
 	ScreenOut(m_EnemyBullets);
 
@@ -105,12 +106,31 @@ void GameScene::ScreenOut(std::vector<Bullet*>& bullet)
 	while (it != bullet.end())
 	{
 
-		if ((*it)->GetPos().y < -32 ||
-			(*it)->GetPos().y > 632 ||
-			(*it)->GetPos().x < -32 ||
-			(*it)->GetPos().x > 832)
+		if ((*it)->GetPos().y < 0 ||
+			(*it)->GetPos().y > 600 ||
+			(*it)->GetPos().x < -0 ||
+			(*it)->GetPos().x > 800)
 		{
 			it = bullet.erase(it);
+		}
+		else {
+			it++;
+		}
+	}
+}
+
+void GameScene::ScreenOut(std::vector<Enemy*>& enemies)
+{
+	std::vector<Enemy*>::iterator it = enemies.begin();
+	while (it != enemies.end())
+	{
+		// ˆÚ“®•ûŒü‚ªÁ‚¦‚é•ûŒü‚©‚Â‰æ–ÊŠO‚Öo‚½‚Æ‚«‚É“G‚ðíœ‚·‚é
+		if (((*it)->GetPos().y < -32 && (*it)->ENEMY_SPD.y < 0.0f) ||
+			((*it)->GetPos().y > 632 && (*it)->ENEMY_SPD.y > 0.0f) ||
+			((*it)->GetPos().x < -32 && (*it)->ENEMY_SPD.x < 0.0f) ||
+			((*it)->GetPos().x > 632 && (*it)->ENEMY_SPD.x > 0.0f))
+		{
+			it = enemies.erase(it);
 		}
 		else {
 			it++;
