@@ -22,7 +22,7 @@ GameScene::GameScene(ID3D11Device * device, ID3D11DeviceContext * context)
 	:BaseScene()
 {
 	m_Player = new Player(device);
-
+	
 	LoadCSV(device);
 }
 
@@ -37,119 +37,188 @@ void GameScene::Update()
 {
 	// ƒL[‚Ì”»’è
 	auto KeyState = keyboard->GetState();
+
+	//__/__/__/__/__/XVˆ—Œn/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/
+
 	// “G‚ªo‚Ä‚¢‚é”‚¾‚¯XVˆ—s‚¤
 	for (std::vector<Enemy*>::iterator itr = m_Enemies.begin(); itr != m_Enemies.end(); itr++)
 	{
 		(*itr)->Update();
+		// UŒ‚‰Â”\‚È‚ç’e‚ğ”­Ë‚·‚é
+		if ((*itr)->isAttackEnemy())
+		{
+			SetEnemyBullet(itr);
+		}
 	}
 
 	// ƒvƒŒƒCƒ„‚ªo‚Ä‚¢‚éê‡ƒvƒŒƒCƒ„‚ÌXVˆ—‚ğs‚¤
-	if (m_Player != nullptr)
+	if (m_Player != nullptr) {
 		m_Player->Update(KeyState);
-
-	// “G‚ª‚¢‚È‚¯‚ê‚Î“–‚Ä‚é•K—v‚ª‚È‚¢
-	if (m_Enemies.size() > 0)
-	{
-		std::vector<Enemy*>::iterator eItr = m_Enemies.begin();
-		while (eItr != m_Enemies.end())
+		// UŒ‚‰Â”\‚È‚ç’e‚ğ”­Ë‚·‚é
+		if (m_Player->isAttackPlayer())
 		{
-			// ƒvƒŒƒCƒ„‚ª‘¶İ‚µ‚È‚¯‚ê‚Î“–‚½‚ç‚È‚¢‚Ì‚Å‚¢‚½‚ç“–‚½‚Á‚Ä‚¢‚é‚©‚ğŒ©‚é
-			if (m_Player != nullptr)
-			{
-				// ƒvƒŒƒCƒ„‚Æ“G‚Ì”»’è
-				if (OnCollision2DCircle_Circle((*eItr)->GetCollisionCircle(), m_Player->GetCollisionCircle()))
-				{
-					eItr = m_Enemies.erase(eItr);
-					break;
-				}
-				// ƒvƒŒƒCƒ„‚ª’e‚ğ”­Ë‚µ‚Ä‚¢‚È‚©‚Á‚½‚ç’Ê‚ç‚È‚¢
-				else if (m_Player->GetBullet().size() > 0)
-				{
-					// ƒvƒŒƒCƒ„‚Ì’e‚Æ“G‚Ì“–‚½‚è”»’è
-					std::vector<Bullet>::iterator pBullet = m_Player->GetBullet().begin();
-					while (pBullet != m_Player->GetBullet().end())
-					{
-						if (OnCollision2DCircle_Circle(pBullet->GetCollisionCircle(), (*eItr)->GetCollisionCircle()))
-						{
-							//delete m_Enemy;
-							//m_Enemy = nullptr;
-
-							pBullet = m_Player->GetBullet().erase(pBullet);
-							//break;
-						}
-						else {
-							pBullet++;
-						}
-					}
-				}
-				if ((*eItr)->GetBullet().size() > 0)
-				{
-					// “G‚ª’e‚ğ”­Ë‚µ‚Ä‚¢‚È‚©‚Á‚½‚ç’Ê‚ç‚È‚¢
-					std::vector<Bullet>::iterator eBullet = (*eItr)->GetBullet().begin();
-					while (eBullet != (*eItr)->GetBullet().end())
-					{
-
-						// “G‚Ì’e‚ÆƒvƒŒƒCƒ„‚Ì“–‚½‚è”»’è
-						if (OnCollision2DCircle_Circle(eBullet->GetCollisionCircle(), m_Player->GetCollisionCircle()))
-						{
-							//delete m_Enemy;
-							//m_Enemy = nullptr;
-
-							eBullet = (*eItr)->GetBullet().erase(eBullet);
-							//break;
-						}
-						else {
-							eBullet++;
-						}
-					}
-
-					if ((*eItr)->GetBullet().size() > 0) 
-					{
-						// ’e‚ğÅ‰‚©‚çŒ©‚é
-						eBullet = (*eItr)->GetBullet().begin();
-
-						while (eBullet != (*eItr)->GetBullet().end())
-						{
-							std::vector<Bullet>::iterator pBullet = m_Player->GetBullet().begin();
-							if (m_Player->GetBullet().size() > 0)
-							{
-								while (pBullet != m_Player->GetBullet().end())
-								{
-									// “G‚Ì’e‚ÆƒvƒŒƒCƒ„‚Ì’e‚Ì“–‚½‚è”»’è
-									if (OnCollision2DCircle_Circle(eBullet->GetCollisionCircle(), pBullet->GetCollisionCircle()))
-									{
-										//delete m_Enemy;
-										//m_Enemy = nullptr;
-
-										eBullet = (*eItr)->GetBullet().erase(eBullet);
-										pBullet = m_Player->GetBullet().erase(pBullet);
-										eBullet--;
-									}
-									else {
-										pBullet++;
-									}
-								}
-
-							}
-							eBullet++;
-						}
-					}
-				}
-				eItr++;
-			}
+			SetPlayerBullet();
 		}
+	}
+	BulletUpdate(m_PlayerBullets);
+	BulletUpdate(m_EnemyBullets);
+
+	ScreenOut(m_PlayerBullets);
+	ScreenOut(m_EnemyBullets);
+
+//__/__/__/__/__/“–‚½‚è”»’èˆ—/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/
+
+	CollisionBullet_Player(m_EnemyBullets,m_Player);
+	CollisionBullet_Enemy(m_PlayerBullets,m_Enemies);
+
+	// ‰¼‚Å“G‚Æ“G‚Ì’e‚ª‘S‚ÄÁ‚¦‚½‚çƒQ[ƒ€‚ğI—¹‚·‚é
+	if (m_Enemies.empty() && m_EnemyBullets.empty())
+	{
+		exit(1);
 	}
 }
 
 void GameScene::Render(SpriteBatch* spriteBatch)
 {
+	if (m_Player != nullptr)
+	{
+		m_Player->Render(spriteBatch);
+	}
+	for (std::vector<Bullet*>::iterator itr = m_PlayerBullets.begin(); itr != m_PlayerBullets.end(); itr++)
+	{
+		(*itr)->Render(spriteBatch);
+	}
 	for (std::vector<Enemy*>::iterator itr = m_Enemies.begin(); itr != m_Enemies.end(); itr++)
 	{
 		(*itr)->Render(spriteBatch);
 	}
+	for (std::vector<Bullet*>::iterator itr = m_EnemyBullets.begin(); itr != m_EnemyBullets.end(); itr++)
+	{
+		(*itr)->Render(spriteBatch);
+	}
+}
 
-	if (m_Player != nullptr)
-	m_Player->Render(spriteBatch);
+void GameScene::ScreenOut(std::vector<Bullet*>& bullet)
+{
+	
+	std::vector<Bullet*>::iterator it = bullet.begin();
+	while (it != bullet.end())
+	{
+
+		if ((*it)->GetPos().y < -32 ||
+			(*it)->GetPos().y > 632 ||
+			(*it)->GetPos().x < -32 ||
+			(*it)->GetPos().x > 832)
+		{
+			it = bullet.erase(it);
+		}
+		else {
+			it++;
+		}
+	}
+}
+
+void GameScene::BulletUpdate(std::vector<Bullet*> bullet)
+{
+	if (!bullet.empty()) {
+		std::vector<Bullet*>::iterator itr = bullet.begin();
+
+		while (itr != bullet.end())
+		{
+			(*itr)->Update();
+			itr++;
+		}
+	}
+}
+
+void GameScene::SetPlayerBullet()
+{
+	std::vector<Bullet*> pBullet = m_Player->CreateBullets();
+	for (std::vector<Bullet*>::iterator itr = pBullet.begin();
+		itr != pBullet.end();
+		itr++)
+	{
+		m_PlayerBullets.push_back(*itr);
+	}
+}
+
+void GameScene::SetEnemyBullet(std::vector<Enemy*>::iterator itr)
+{
+	std::vector<Bullet*> EnemyBullet =  (*itr)->CreateBullets();
+	for (std::vector<Bullet*>::iterator it = EnemyBullet.begin();
+		it != EnemyBullet.end();
+		it++)
+	{
+		m_EnemyBullets.push_back(*it);
+	}
+}
+
+void GameScene::CollisionBullet_Player(std::vector<Bullet*>& bullet1, Player* & Player)
+{
+	if (!bullet1.empty()) {
+		std::vector<Bullet*>::iterator itr = bullet1.begin();
+		while (itr != bullet1.end())
+		{
+			if (m_Player == nullptr)
+			{
+				break;
+			}
+			if (Collision2D::OnCircle2(Player->GetCollisionCircle(), (*itr)->GetCollisionCircle()))
+			{
+				itr = bullet1.erase(itr);
+				// delete m_Player;
+				// m_Player = nullptr;
+			}
+			else
+			{
+				if (bullet1.empty())
+				{
+					break;
+				}
+				itr++;
+			}
+
+			if (m_Player == nullptr)
+			{
+				break;
+			}
+		}
+	}
+}
+
+void GameScene::CollisionBullet_Enemy(std::vector<Bullet*>& bullet, std::vector<Enemy*>& Enemies)
+{
+	if (!Enemies.empty()) {
+		std::vector<Enemy*>::iterator itr = Enemies.begin();
+		while (itr != Enemies.end())
+		{
+			if (!bullet.empty()) {
+				std::vector<Bullet*>::iterator itrB = bullet.begin();
+				while (itrB != bullet.end()) 
+				{
+					if (Collision2D::OnCircle2((*itr)->GetCollisionCircle(), (*itrB)->GetCollisionCircle()))
+					{
+						itrB = bullet.erase(itrB);
+						itr = Enemies.erase(itr);
+						if (itr != Enemies.begin()) {
+							itr--;
+						}
+					}
+					else
+					{
+						itrB++;
+					}
+					if (Enemies.empty()) {
+						break;
+					}
+				}
+			}
+			if (Enemies.empty()) {
+				break;
+			}
+			itr++;
+		}
+	}
 }
 
 void GameScene::LoadCSV(ID3D11Device* device)

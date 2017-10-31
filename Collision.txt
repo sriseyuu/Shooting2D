@@ -1,0 +1,64 @@
+
+	// “G‚ª‚¢‚È‚¯‚ê‚Î“–‚Ä‚é•K—v‚ª‚È‚¢
+	if (!m_Enemies.empty())
+	{
+		std::vector<Enemy*>::iterator eItr = m_Enemies.begin();
+		while (eItr != m_Enemies.end())
+		{
+			// ƒvƒŒƒCƒ„‚ª‘¶Ý‚µ‚È‚¯‚ê‚Î“–‚½‚ç‚È‚¢‚Ì‚Å‚¢‚½‚ç“–‚½‚Á‚Ä‚¢‚é‚©‚ðŒ©‚é
+			if (m_Player != nullptr)
+			{
+				// ƒvƒŒƒCƒ„‚Æ“G‚Ì”»’è
+				if (Collision2D::OnCircle2((*eItr)->GetCollisionCircle(), m_Player->GetCollisionCircle()))
+				{
+					eItr = m_Enemies.erase(eItr);
+					break;
+				}
+				// ƒvƒŒƒCƒ„‚ª’e‚ð”­ŽË‚µ‚Ä‚¢‚È‚©‚Á‚½‚ç’Ê‚ç‚È‚¢
+				else if (!m_Player->GetBullet().empty())
+				{
+					// ƒvƒŒƒCƒ„‚Ì’e‚Æ“G‚Ì“–‚½‚è”»’è
+					std::vector<Bullet>::iterator pBullet = m_Player->GetBullet().begin();
+					while (pBullet != m_Player->GetBullet().end())
+					{
+						if (Collision2D::OnCircle2(pBullet->GetCollisionCircle(), (*eItr)->GetCollisionCircle()))
+						{
+							pBullet = m_Player->GetBullet().erase(pBullet);
+
+							eItr = m_Enemies.erase(eItr);
+							break;
+						}
+						else {
+							pBullet++;
+						}
+					}
+
+					if (eItr == m_Enemies.end()) {
+						break;
+					}
+				}
+				if (!(*eItr)->GetBullet().empty())
+				{
+					// “G‚ª’e‚ð”­ŽË‚µ‚Ä‚¢‚È‚©‚Á‚½‚ç’Ê‚ç‚È‚¢
+					std::vector<Bullet>::iterator eBullet = (*eItr)->GetBullet().begin();
+					while (eBullet != (*eItr)->GetBullet().end())
+					{
+
+						// “G‚Ì’e‚ÆƒvƒŒƒCƒ„‚Ì“–‚½‚è”»’è
+						if (Collision2D::OnCircle2(eBullet->GetCollisionCircle(), m_Player->GetCollisionCircle()))
+						{
+							//delete m_Enemy;
+							//m_Enemy = nullptr;
+
+							eBullet = (*eItr)->GetBullet().erase(eBullet);
+							//break;
+						}
+						else {
+							eBullet++;
+						}
+					}
+				}
+				eItr++;
+			}
+		}
+	}

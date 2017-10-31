@@ -11,6 +11,9 @@
     <Filter Include="Sprite">
       <UniqueIdentifier>{3d27c6e0-519d-483a-bb09-bb17e9df00d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{821d43c7-6278-4da2-a772-a10b9683d6ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -28,6 +31,19 @@
     <ClInclude Include="Sprite2D.h">
       <Filter>Sprite</Filter>
     </ClInclude>
+    <ClInclude Include="Collision2D.h" />
+    <ClInclude Include="TitleScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -41,6 +57,19 @@
     </ClCompile>
     <ClCompile Include="Sprite2D.cpp">
       <Filter>Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision2D.cpp" />
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
