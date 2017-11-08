@@ -7,15 +7,15 @@ using namespace DirectX::SimpleMath;
 TitleScene::TitleScene(ID3D11Device * device, ID3D11DeviceContext * context)
 	:BaseScene()
 {
-	CreateWICTextureFromFile(device,L"Resources/TitleBackground.png",nullptr,m_texture.ReleaseAndGetAddressOf());
+	CreateWICTextureFromFile(device,L"Resources/danron_srise1103Image.png",nullptr,m_texture.ReleaseAndGetAddressOf());
 }
 
 void TitleScene::Update()
 {
-	auto KeyState = keyboard->GetState();
+	auto KeyState = m_Keyboard->GetState();
 	if (KeyState.IsKeyDown(Keyboard::Keys::Enter))
 	{
-		
+		Scene = 2;
 	}
 }
 

@@ -20,6 +20,9 @@
 #include <SpriteBatch.h>
 
 #include <CommonStates.h>
+
+#include <WICTextureLoader.h>
+
 class Sprite2D
 {
 public:
@@ -29,12 +32,13 @@ public:
 	void SetTexture(ID3D11Device* device, const wchar_t* filename);
 	void SetTexture(Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> texture);
 
-	void Update();
+	virtual void Update();
 
-	void Render(DirectX::SpriteBatch* spriteBatch);
+	virtual void Render(DirectX::SpriteBatch* spriteBatch);
 
 	// 画像の座標の取得と設定
 	void SetPos(DirectX::SimpleMath::Vector2 pos) { m_screenPos = pos; }
+	void SetPos(float posx, float posy) { m_screenPos = DirectX::SimpleMath::Vector2(posx, posy); }
 	DirectX::SimpleMath::Vector2 GetPos() { return m_screenPos; }
 
 	// 回転角の設定
@@ -47,6 +51,8 @@ public:
 	void Translate(DirectX::SimpleMath::Vector2 vec);
 	// プレイヤのフレーム回転
 	void Rotate(float rot) { m_rot += rot; }
+	
+	void SetColor(DirectX::SimpleMath::Color color) { col = color; }
 private:
 	// テクスチャ
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_texture;
@@ -56,4 +62,6 @@ private:
 	DirectX::SimpleMath::Vector2 m_origin;
 	// 回転角
 	float m_rot = 0.0f;
+	// iro
+	DirectX::SimpleMath::Color col = DirectX::Colors::White;
 };

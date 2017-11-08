@@ -21,7 +21,7 @@ const Vector2 Player::BULLET_SPD = DirectX::SimpleMath::Vector2(0, -16.0f);
 Player::Player(ID3D11Device* device)
 	: m_Bullets()
 {
-	m_Player.SetTexture(device,L"Resources/Bullet.png");
+	m_Player.SetTexture(device,L"Resources/Player.png");
 	m_Player.SetPos(Vector2(300	,500));
 
 	m_Bullets.resize(0);
@@ -32,6 +32,10 @@ Player::Player(ID3D11Device* device)
 	m_Collision.m_Radius = m_CollisionSprite.GetTextureSize().x / 2;
 
 	m_bulletSprite.SetTexture(device, L"Resources/Bullet.png");
+
+	//m_Player_HitPoint_UI.SetTexture(device,L"Resources/Player_HitPoint_UI.png");
+	//m_Player_HitPoint_UI.SetPos(Vector2(200,500));
+
 }
 
 void Player::Update(DirectX::Keyboard::State state)
@@ -51,8 +55,12 @@ void Player::Update(DirectX::Keyboard::State state)
 	if (state.Right) {
 		spd.x += MOVE_SPD;
 	}
-
-	m_Player.Translate(spd);
+	if (m_Player.GetPos().x + spd.x < 800 &&
+		m_Player.GetPos().x + spd.x > 0 &&
+		m_Player.GetPos().y + spd.y < 600 &&
+		m_Player.GetPos().y + spd.y > 0) {
+		m_Player.Translate(spd);
+	}
 
 	if (state.Z) {
 
@@ -83,10 +91,24 @@ void Player::Render(DirectX::SpriteBatch * spriteBatch)
 {
 	m_Player.Render(spriteBatch);
 	m_CollisionSprite.Render(spriteBatch);
+
+//	m_Player_HitPoint_UI.Render(spriteBatch);
 }
 
 
 std::vector<Bullet*>& Player::CreateBullets()
+{
+	// TODO: return ステートメントをここに挿入します
+	switch (0)
+	{
+	case 0:
+		return CreateBullets3Way();
+	default:
+		return CreateBullets3Way();
+	}
+}
+
+std::vector<Bullet*>& Player::CreateBullets3Way()
 {
 	m_Bullets.clear();
 	// TODO: return ステートメントをここに挿入します

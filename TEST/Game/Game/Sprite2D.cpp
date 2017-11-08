@@ -10,7 +10,6 @@
 //													
 //__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/
 #include "Sprite2D.h"
-#include <WICTextureLoader.h>
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
@@ -50,7 +49,7 @@ void Sprite2D::Update()
 
 void Sprite2D::Render(DirectX::SpriteBatch* spriteBatch)
 {
-	spriteBatch->Draw(m_texture.Get(), m_screenPos, nullptr, Colors::White,
+	spriteBatch->Draw(m_texture.Get(), m_screenPos, nullptr, col,
 		m_rot, m_origin);
 }
 

@@ -1,6 +1,7 @@
 //
 // Main.cpp
 //
+#include <time.h>
 
 #include "pch.h"
 #include "Game.h"
@@ -24,6 +25,8 @@ extern "C"
 // Entry point
 int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
+	srand((unsigned int)time(NULL));
+
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -114,7 +117,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     PAINTSTRUCT ps;
     HDC hdc;
 
-    static bool s_in_sizemove = false;
+    static bool s_in_sizemove = true;
     static bool s_in_suspend = false;
     static bool s_minimized = false;
     static bool s_fullscreen = false;
@@ -258,7 +261,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         // A menu is active and the user presses a key that does not correspond
         // to any mnemonic or accelerator key. Ignore so we don't produce an error beep.
         return MAKELRESULT(0, MNC_CLOSE);
-
     }
 
     return DefWindowProc(hWnd, message, wParam, lParam);

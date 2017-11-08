@@ -20,11 +20,14 @@ class Enemy
 {
 private:
 	void CreateBulletAround();
+	void CreateBullet3Way();
+	void CreateBulletRandom();
 public:
 	enum BULLET_TYPE
 	{
 		TYPE_AROUND,
-		TYPE_A,
+		TYPE_3WAY,
+		TYPE_RANDOM,
 	};
 
 	float BULLET_SPD = 16.0f;
@@ -52,6 +55,12 @@ public:
 
 	bool isAttackEnemy() { return m_isAttack; }
 
+	// ダメージを受ける
+	bool Damage(int damagePoint) { m_HitPoint -= damagePoint; if (m_HitPoint <= 0) { return true; } return false; }
+
+	// 体力の取得と設定
+	void SetHitPoint(int HitPoint) { m_HitPoint = HitPoint; }
+	int GetHitPoint() { return m_HitPoint; }
 private:
 	// カウント
 	int cnt = 0;
@@ -69,4 +78,6 @@ private:
 	Sprite2D m_BulletSprite;
 
 	bool m_isAttack = false;
+
+	int m_HitPoint;
 };

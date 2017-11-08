@@ -14,9 +14,11 @@
 #include <SpriteBatch.h>
 
 #include <Keyboard.h>
+#include <GamePad.h>
 class BaseScene
 {
 public:
+	static int Scene;
 
 	// デストラクタ
 	virtual ~BaseScene() {}
@@ -26,5 +28,6 @@ public:
 	virtual void Render(DirectX::SpriteBatch* spriteBatch) = 0;
 
 protected:
-	std::unique_ptr<DirectX::Keyboard> keyboard = std::make_unique<DirectX::Keyboard>();
+	std::unique_ptr<DirectX::Keyboard> m_Keyboard = std::make_unique<DirectX::Keyboard>();
+	std::unique_ptr<DirectX::GamePad> m_GamePad = std::make_unique<DirectX::GamePad>();
 };
