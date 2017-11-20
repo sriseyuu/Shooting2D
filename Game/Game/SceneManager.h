@@ -23,14 +23,16 @@
 #include <CommonStates.h>
 
 #include "BaseScene.h"
-#include "GameScene.h"
+#include "LogoScene.h"
 #include "TitleScene.h"
+#include "GameScene.h"
 
 class SceneManager
 {
 public:
 	enum SCENE
 	{
+		SCENE_LOGO,
 		SCENE_TITLE,
 		SCENE_GAME,
 	};
@@ -46,14 +48,14 @@ public:
 	void Render();
 
 	// シーン変更処理
-	void ChangeScene(SCENE scene);
+	void ChangeScene(int scene);
 
 private:
 	// シーン
 	BaseScene* m_Scene;
 
-	SCENE m_NowScene;
-	SCENE m_NextScene;
+	int m_NowScene;
+	int m_NextScene;
 
 	std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch;
 	std::unique_ptr<DirectX::CommonStates> m_states;

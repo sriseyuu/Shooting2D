@@ -6,7 +6,7 @@
 //													
 // 作 成 者：Yuga Yamamoto							
 //													
-// 更新日時：2017 / 10 / 26							
+// 更新日時：2017 / 11 / 16							
 //													
 //__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/
 #include "GameScene.h"
@@ -25,7 +25,7 @@ GameScene::GameScene(ID3D11Device * device, ID3D11DeviceContext * context)
 {
 	m_Player = new Player(device);
 	
-	LoadCSV(device);
+	//LoadCSV(device);
 
 	CreateWICTextureFromFile(device, L"Resources/Background.png", nullptr, m_Background.ReleaseAndGetAddressOf());
 	BackgroundY = 0;
@@ -45,8 +45,15 @@ GameScene::~GameScene()
 
 void GameScene::Update()
 {
+	BackgroundY += 0.5f;
+	if (BackgroundY > 600)
+	{
+		BackgroundY = 0;
+	}
+	m_counter++;
 	// キーの判定
 	auto KeyState = m_Keyboard->GetState();
+	auto Padstate = m_GamePad->GetState(0);
 
 	//__/__/__/__/__/更新処理系/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/__/
 	
@@ -66,7 +73,7 @@ void GameScene::Update()
 
 	// プレイヤが出ている場合プレイヤの更新処理を行う
 	if (m_Player != nullptr) {
-		m_Player->Update(KeyState);
+		m_Player->Update(KeyState, Padstate);
 		// 攻撃可能なら弾を発射する
 		if (m_Player->isAttackPlayer())
 		{
@@ -87,16 +94,12 @@ void GameScene::Update()
 	CollisionBullet_Obstacle(m_EnemyBullets,m_Obstacle);
 	CollisionBullet_Obstacle(m_PlayerBullets, m_Obstacle);
 
-	BackgroundY += 0.5f;
-	if (BackgroundY > 600) 
-	{
-		BackgroundY = 0;
-	}
+
 
 	// 仮で敵と敵の弾が全て消えたらゲームを終了する
 	if (m_Enemies.empty() && m_EnemyBullets.empty())
 	{
-		Scene = 0;
+		//Scene = 1;
 	}
 }
 
@@ -256,6 +259,7 @@ void GameScene::CollisionBullet_Enemy(std::vector<Bullet*>& bullet, std::vector<
 						if ((*itr)->Damage(1))
 						{
 							itr = Enemies.erase(itr);
+							if(m_Player != nullptr) m_Player->PlusPow(1);
 						}
 						if (itr != Enemies.begin()) {
 							itr--;
@@ -312,7 +316,7 @@ void GameScene::CollisionBullet_Obstacle(std::vector<Bullet*>& bullet, Obstacle 
 void GameScene::LoadCSV(ID3D11Device* device)
 {
 	// csvフォルダを呼ぶ
-	std::wifstream ifs("CSV/Enemy1.csv");
+	std::wifstream ifs("CSV/EnemyTest.csv");
 
 	std::wstring line;
 
@@ -366,6 +370,15 @@ void GameScene::LoadCSV(ID3D11Device* device)
 		int HitPoint;
 		stream >> HitPoint;
 
+		int Interval;
+		stream >> Interval;
+
+		int BulletType;
+		stream >> BulletType;
+
+		bool isBrake;
+		stream >> isBrake;
+
 //__/__/__/__/__/__/１グループに必要なものを反映させる/__/__/__/__/__/__/__/__//
 		for(int i = 0; i < EnemyGroup; i++)
 		{
@@ -379,11 +392,16 @@ void GameScene::LoadCSV(ID3D11Device* device)
 			// 敵が移動する距離を求める
 			Vector2 move = endPos - pos;
 
-			enemy->ENEMY_SPD = Vector2(move / SpdTime);
-
+			if (isBrake){ enemy->ENEMY_SPD = move / SpdTime * 2;
+				enemy->SetBrake(move / SpdTime / (SpdTime / 1.5f)); } 
+			else { enemy->ENEMY_SPD = move / SpdTime; }
 			enemy->SetMoveCnt(movetime + (i * GroupTime));
-
+			
 			enemy->SetHitPoint(HitPoint);
+
+			enemy->SetInterval(Interval);
+
+			enemy->BulletType = BulletType;
 
 			m_Enemies.push_back(enemy);
 		}

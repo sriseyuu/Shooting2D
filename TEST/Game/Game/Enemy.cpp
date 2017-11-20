@@ -46,7 +46,7 @@ void Enemy::CreateBulletRandom()
 		bullet->SetSprite(m_BulletSprite);
 		bullet->SetPos(m_sprite.GetPos());
 		bullet->SetRotation(XMConvertToRadians(rand() % 3600 / 10.0f));
-		bullet->SetSpd(Vector2(0, BULLET_SPD / (rand() % 20 / 10 + 3)));
+		bullet->SetSpd(Vector2(0, BULLET_SPD / (rand() % 20 / 10 + 2)));
 		m_Bullets.push_back(bullet);
 	}
 }
@@ -79,15 +79,15 @@ void Enemy::Update()
 	if (m_MoveStartCnt < 0) {
 		cnt++;
 
+		ENEMY_SPD -= m_Brake;
 		m_sprite.Translate(ENEMY_SPD);
 
 		m_Collision.m_pos = m_sprite.GetPos();
 
-		if (cnt % 45 == 1)
+		if (cnt % m_Interval == 1)
 		{
-				m_isAttack = true;
-			}
-		else {
+			m_isAttack = true;
+		} else {
 			m_isAttack = false;
 		}
 	}
@@ -106,7 +106,7 @@ void Enemy::Render(DirectX::SpriteBatch* spriteBatch)
 std::vector<Bullet*> Enemy::CreateBullets()
 {
 	m_Bullets.clear();
-	switch (TYPE_AROUND)
+	switch (BulletType)
 	{
 	case TYPE_AROUND:
 		CreateBulletAround();

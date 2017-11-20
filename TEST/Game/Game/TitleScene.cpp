@@ -13,7 +13,8 @@ TitleScene::TitleScene(ID3D11Device * device, ID3D11DeviceContext * context)
 void TitleScene::Update()
 {
 	auto KeyState = m_Keyboard->GetState();
-	if (KeyState.IsKeyDown(Keyboard::Keys::Enter))
+	auto Padstate = m_GamePad->GetState(0);
+	if (KeyState.IsKeyDown(Keyboard::Keys::Enter) || Padstate.IsStartPressed())
 	{
 		Scene = 2;
 	}

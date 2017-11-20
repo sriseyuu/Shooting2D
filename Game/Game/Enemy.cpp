@@ -16,12 +16,37 @@ using namespace DirectX::SimpleMath;
 
 void Enemy::CreateBulletAround()
 {
-	for (int i = 0; i < 36; i++) {
+	for (int i = 0; i < 18; i++) {
 		Bullet* bullet = new Bullet();
 		bullet->SetSprite(m_BulletSprite);
 		bullet->SetPos(m_sprite.GetPos());
-		bullet->SetRotation(XMConvertToRadians(i * 10.0f));
+		bullet->SetRotation(XMConvertToRadians(i * 20.0f));
 		bullet->SetSpd(Vector2(0, BULLET_SPD / 4.0f));
+		m_Bullets.push_back(bullet);
+	}
+}
+
+void Enemy::CreateBullet3Way()
+{
+	for (int i = 0; i < 3; i++) {
+		Bullet* bullet = new Bullet();
+		bullet->SetSprite(m_BulletSprite);
+		bullet->SetPos(m_sprite.GetPos());
+		bullet->SetRotation(XMConvertToRadians((i - 1) * 15.0f));
+		bullet->SetSpd(Vector2(0, BULLET_SPD / 4.0f));
+		m_Bullets.push_back(bullet);
+	}
+}
+
+void Enemy::CreateBulletRandom()
+{
+	int random = rand() % 36;
+	for (int i = 0; i < random; i++) {
+		Bullet* bullet = new Bullet();
+		bullet->SetSprite(m_BulletSprite);
+		bullet->SetPos(m_sprite.GetPos());
+		bullet->SetRotation(XMConvertToRadians(rand() % 3600 / 10.0f));
+		bullet->SetSpd(Vector2(0, BULLET_SPD / (rand() % 20 / 10 + 2)));
 		m_Bullets.push_back(bullet);
 	}
 }
@@ -51,7 +76,6 @@ Enemy::Enemy(ID3D11Device* device,const wchar_t* filename)
 
 void Enemy::Update()
 {
-	m_MoveStartCnt--;
 	if (m_MoveStartCnt < 0) {
 		cnt++;
 
@@ -59,13 +83,17 @@ void Enemy::Update()
 
 		m_Collision.m_pos = m_sprite.GetPos();
 
-		if (cnt % 45 == 1)
+		if (cnt % m_Interval == 1)
 		{
 				m_isAttack = true;
 			}
 		else {
 			m_isAttack = false;
 		}
+	}
+	else 
+	{
+		m_MoveStartCnt--;
 	}
 	m_Collision.m_pos = m_sprite.GetPos();
 }
@@ -78,10 +106,16 @@ void Enemy::Render(DirectX::SpriteBatch* spriteBatch)
 std::vector<Bullet*> Enemy::CreateBullets()
 {
 	m_Bullets.clear();
-	switch (0)
+	switch (BulletType)
 	{
 	case TYPE_AROUND:
 		CreateBulletAround();
+		break;
+	case TYPE_3WAY:
+		CreateBullet3Way();
+		break;
+	case TYPE_RANDOM:
+		CreateBulletRandom();
 		break;
 	}
 	return m_Bullets;

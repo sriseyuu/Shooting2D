@@ -13,6 +13,8 @@
 
 using namespace DirectX;
 
+int BaseScene::Scene = SceneManager::SCENE_GAME;
+
 SceneManager::SceneManager(ID3D11Device* device, ID3D11DeviceContext* context)
 {
 	m_device = device;
@@ -24,11 +26,10 @@ SceneManager::SceneManager(ID3D11Device* device, ID3D11DeviceContext* context)
 
 	m_Scene = nullptr;
 
-	m_NextScene = SCENE_GAME;
+	m_NextScene = BaseScene::Scene;
 	m_NowScene = m_NextScene;
 
 	ChangeScene(m_NowScene);
-
 }
 
 SceneManager::~SceneManager()
@@ -38,6 +39,7 @@ SceneManager::~SceneManager()
 void SceneManager::Update()
 {
 	m_Scene->Update();
+	m_NextScene = BaseScene::Scene;
 
 	if (m_NowScene != m_NextScene)
 	{
@@ -48,14 +50,14 @@ void SceneManager::Update()
 
 void SceneManager::Render()
 {
-	m_spriteBatch->Begin();
+	m_spriteBatch->Begin(SpriteSortMode_Deferred, m_states->NonPremultiplied());
 	
 	m_Scene->Render(m_spriteBatch.get());
 
 	m_spriteBatch->End();
 }
 
-void SceneManager::ChangeScene(SCENE scene)
+void SceneManager::ChangeScene(int scene)
 {
 	if (m_Scene != nullptr)
 	{
@@ -64,8 +66,11 @@ void SceneManager::ChangeScene(SCENE scene)
 
 	switch (scene)
 	{
+	case SCENE_LOGO:
+		m_Scene = new LogoScene(m_device,m_context);
+		break;
 	case SCENE_TITLE:
-
+		m_Scene = new TitleScene(m_device, m_context);
 		break;
 	case SCENE_GAME:
 		m_Scene = new GameScene(m_device, m_context);

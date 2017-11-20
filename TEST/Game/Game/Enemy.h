@@ -32,6 +32,7 @@ public:
 
 	float BULLET_SPD = 16.0f;
 	DirectX::SimpleMath::Vector2 ENEMY_SPD = DirectX::SimpleMath::Vector2(0,0);
+	int BulletType;
 
 	Enemy() {}
 	Enemy(ID3D11Device* device);
@@ -61,6 +62,13 @@ public:
 	// ‘Ì—Í‚Ìæ“¾‚Æİ’è
 	void SetHitPoint(int HitPoint) { m_HitPoint = HitPoint; }
 	int GetHitPoint() { return m_HitPoint; }
+
+	// ’e‚ÌŠÔŠu‚Ìæ“¾‚Æİ’è
+	void SetInterval(int Interval) { m_Interval = Interval; }
+	int GetInterval() { return m_Interval; }
+
+	void SetBrake(DirectX::SimpleMath::Vector2 brake) { m_Brake = brake; }
+
 private:
 	// ƒJƒEƒ“ƒg
 	int cnt = 0;
@@ -80,4 +88,8 @@ private:
 	bool m_isAttack = false;
 
 	int m_HitPoint;
+
+	int m_Interval;
+
+	DirectX::SimpleMath::Vector2 m_Brake;
 };

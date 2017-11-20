@@ -13,7 +13,7 @@
 
 using namespace DirectX;
 
-int BaseScene::Scene = SceneManager::SCENE_LOGO;
+int BaseScene::Scene = SceneManager::SCENE_GAME;
 
 SceneManager::SceneManager(ID3D11Device* device, ID3D11DeviceContext* context)
 {

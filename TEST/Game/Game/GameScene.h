@@ -48,8 +48,7 @@ public:
 	~GameScene();
 	void Update();
 	void Render(DirectX::SpriteBatch* spriteBatch);
-
-
+	
 
 //__/__/__/__/__/__/__/__/__/ƒƒ“ƒo•Ï”__/__/__/__/__/__/__/__/
 private:
@@ -64,4 +63,6 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_Background;
 	float BackgroundY;
+
+	int m_counter = 0;
 };
